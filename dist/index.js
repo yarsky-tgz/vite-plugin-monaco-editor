@@ -37,7 +37,7 @@ function monacoEditorPlugin(options = {}) {
     };
     let resolvedConfig;
     return {
-        name: 'vite-plugin-monaco-editor',
+        name: 'vite-plugin-moncao-editor',
         configResolved(getResolvedConfig) {
             resolvedConfig = getResolvedConfig;
         },
@@ -45,11 +45,11 @@ function monacoEditorPlugin(options = {}) {
             if (isCDN(publicPath)) {
                 return;
             }
-            workerMiddleware_1.workerMiddleware(server.middlewares, resolvedConfig, options);
+            (0, workerMiddleware_1.workerMiddleware)(server.middlewares, resolvedConfig, options);
         },
         transformIndexHtml(html) {
             const works = getWorks(options);
-            const workerPaths = workerMiddleware_1.getWorkPath(works, options);
+            const workerPaths = (0, workerMiddleware_1.getWorkPath)(works, options);
             const globals = {
                 MonacoEnvironment: `(function (paths) {
           return {
@@ -89,15 +89,15 @@ function monacoEditorPlugin(options = {}) {
             // write publicPath
             fs.mkdirSync(path.resolve(resolvedConfig.root, resolvedConfig.build.outDir, options.publicPath));
             for (const work of works) {
-                if (!fs.existsSync(workerMiddleware_1.cacheDir + workerMiddleware_1.getFilenameByEntry(work.entry))) {
+                if (!fs.existsSync(workerMiddleware_1.cacheDir + (0, workerMiddleware_1.getFilenameByEntry)(work.entry))) {
                     esbuild.buildSync({
                         entryPoints: [resolveMonacoPath(work.entry)],
                         bundle: true,
-                        outfile: workerMiddleware_1.cacheDir + workerMiddleware_1.getFilenameByEntry(work.entry),
+                        outfile: workerMiddleware_1.cacheDir + (0, workerMiddleware_1.getFilenameByEntry)(work.entry),
                     });
                 }
-                const contentBuffer = fs.readFileSync(workerMiddleware_1.cacheDir + workerMiddleware_1.getFilenameByEntry(work.entry));
-                const destPath = path.resolve(resolvedConfig.root, resolvedConfig.build.outDir, options.publicPath, workerMiddleware_1.getFilenameByEntry(work.entry));
+                const contentBuffer = fs.readFileSync(workerMiddleware_1.cacheDir + (0, workerMiddleware_1.getFilenameByEntry)(work.entry));
+                const destPath = path.resolve(resolvedConfig.root, resolvedConfig.build.outDir, options.publicPath, (0, workerMiddleware_1.getFilenameByEntry)(work.entry));
                 // resolvedConfig.root +
                 // '/' +
                 // resolvedConfig.build.outDir +
