@@ -14,7 +14,7 @@ exports.cacheDir = 'node_modules/.monaco/';
 function getWorkPath(works, options) {
     const workerPaths = {};
     for (const work of works) {
-        if ((0, index_1.isCDN)(options.publicPath)) {
+        if (index_1.isCDN(options.publicPath)) {
             workerPaths[work.label] = options.publicPath + '/' + getFilenameByEntry(work.entry);
         }
         else {
@@ -39,7 +39,7 @@ function getWorkPath(works, options) {
 }
 exports.getWorkPath = getWorkPath;
 function workerMiddleware(middlewares, config, options) {
-    const works = (0, index_1.getWorks)(options);
+    const works = index_1.getWorks(options);
     // clear cacheDir
     if (fs.existsSync(exports.cacheDir)) {
         fs.rmdirSync(exports.cacheDir, { recursive: true, force: true });
@@ -49,7 +49,7 @@ function workerMiddleware(middlewares, config, options) {
         middlewares.use(config.base + options.publicPath + '/' + getFilenameByEntry(work.entry), function (req, res, next) {
             if (!fs.existsSync(exports.cacheDir + getFilenameByEntry(work.entry))) {
                 esbuild.buildSync({
-                    entryPoints: [(0, index_1.resolveMonacoPath)(work.entry)],
+                    entryPoints: [index_1.resolveMonacoPath(work.entry)],
                     bundle: true,
                     outfile: exports.cacheDir + getFilenameByEntry(work.entry),
                 });
